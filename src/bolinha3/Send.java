@@ -1,4 +1,5 @@
 package bolinha3;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -15,6 +16,11 @@ public class Send {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void Send(String message) {
+        this.output.println(message);
+        this.output.flush();
     }
 
     @Override
