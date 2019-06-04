@@ -1,4 +1,4 @@
-package bolinha3;
+package Cliente;
 
 import java.io.IOException;
 import java.io.PrintWriter;

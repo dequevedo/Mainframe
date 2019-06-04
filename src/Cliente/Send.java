@@ -1,5 +1,6 @@
-package bolinha3;
+package Cliente;
 
+import Servidor.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;

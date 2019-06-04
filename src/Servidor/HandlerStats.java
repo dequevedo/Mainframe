@@ -1,4 +1,4 @@
-package bolinha3;
+package Servidor;
 
 import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;

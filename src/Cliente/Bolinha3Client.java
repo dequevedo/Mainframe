@@ -1,4 +1,4 @@
-package bolinha3;
+package Cliente;
 
 import java.awt.Color;
 import java.awt.Graphics;
