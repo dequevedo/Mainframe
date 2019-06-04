@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 public class TCPClientMain {
 
-    public TCPClientMain(String serverAddress, int serverPort, Bolinha3Client caller) throws UnknownHostException, IOException {
+    public TCPClientMain(String serverAddress, int serverPort, ClienteInterface caller) throws UnknownHostException, IOException {
         this.socket = new Socket(serverAddress, serverPort);
         //this.socket.setKeepAlive(true);
         handler = new TCPClientHandler(socket, caller);
