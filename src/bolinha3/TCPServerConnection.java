@@ -1,7 +1,5 @@
 package bolinha3;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class TCPServerConnection {
@@ -15,6 +13,7 @@ public class TCPServerConnection {
         try {
             sender = new Send(socket);
             receiver = new Receive(socket);
+            receiver.start();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }

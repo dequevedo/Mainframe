@@ -6,13 +6,13 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Receive implements Runnable{
+public class Receive extends Thread{
 
     public Socket socket;
     public BufferedReader input;
     public String dataRead=""; 
 
-    public Receive(Socket socket) throws IOException {
+    public Receive(Socket socket)  throws IOException {
         this.socket = socket;
         try {
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
