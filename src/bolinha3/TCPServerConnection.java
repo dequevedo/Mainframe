@@ -9,14 +9,14 @@ import java.net.Socket;
 public class TCPServerConnection {
 
     private Socket socket;
-    private BufferedReader input;
-    private PrintWriter output;
+    private Send sender;
+    private Receive receiver;
 
     public TCPServerConnection(Socket socket) {
         this.socket = socket;
         try {
-            this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.output = new PrintWriter(this.socket.getOutputStream(), true);
+            sender = new Send(socket);
+            receiver = new Receive(socket);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -24,8 +24,8 @@ public class TCPServerConnection {
 
     @Override
     protected void finalize() throws Throwable {
-        this.input.close();
-        this.output.close();
+        this.sender.finalize();
+        this.receiver.finalize();
         this.socket.close();
     }
 
@@ -34,11 +34,10 @@ public class TCPServerConnection {
     }
 
     public BufferedReader getInput() {
-        return input;
+        return receiver.input;
     }
 
     public PrintWriter getOutput() {
-        return output;
+        return sender.output;
     }
-
 }

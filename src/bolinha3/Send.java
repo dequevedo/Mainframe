@@ -1,0 +1,28 @@
+package bolinha3;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class Send {
+
+    public Socket socket;
+    public PrintWriter output;
+
+    public Send(Socket socket) throws IOException {
+        this.socket = socket;
+        try {
+            this.output = new PrintWriter(this.socket.getOutputStream(), true);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        this.output.close();
+        this.socket.close();
+    }
+}

@@ -20,11 +20,11 @@ public class TCPServerAtivosHandler extends Thread {
     }
 
     private void encerrar() {
-        this.caller.removerCliente(this.cliente);
+        this.caller.removeConnection(this.cliente);
     }
 
     public synchronized void messageDispatcher(String message) throws IOException {
-        List<TCPServerConnection> clientes = this.caller.getClientes();
+        List<TCPServerConnection> clientes = this.caller.getConnections();
         for (TCPServerConnection cli : clientes) {
             if (cli.getSocket() != null && cli.getSocket().isConnected() && cli.getOutput() != null) {
                 cli.getOutput().println(message);

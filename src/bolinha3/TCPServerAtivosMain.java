@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TCPServerAtivosMain extends Thread {
 
-    private List<TCPServerConnection> clientes;
+    private List<TCPServerConnection> connections;
     private ServerSocket server;
     public int x;
     public int y;
@@ -18,7 +18,7 @@ public class TCPServerAtivosMain extends Thread {
     public TCPServerAtivosMain(int porta) throws IOException {
         this.server = new ServerSocket(porta);
         System.out.println(this.getClass().getSimpleName() + " rodando na porta: " + server.getLocalPort());
-        this.clientes = new ArrayList<>();
+        this.connections = new ArrayList<>();
         x = 0;
         y = 0;
         d = 10;
@@ -31,9 +31,9 @@ public class TCPServerAtivosMain extends Thread {
         while (true) {
             try {
                 socket = this.server.accept();
-                TCPServerConnection cliente = new TCPServerConnection(socket);
-                novoCliente(cliente);
-                (new TCPServerAtivosHandler(cliente, this)).start();
+                TCPServerConnection connection = new TCPServerConnection(socket);
+                newConnection(connection);
+                (new TCPServerAtivosHandler(connection, this)).start();
             } catch (IOException ex) {
                 System.out.println("Erro 4: " + ex.getMessage());
             }
@@ -41,27 +41,27 @@ public class TCPServerAtivosMain extends Thread {
     }
     
     
-    public synchronized void novoCliente(TCPServerConnection cliente) throws IOException {
-        clientes.add(cliente);
+    public synchronized void newConnection(TCPServerConnection connection) throws IOException {
+        connections.add(connection);
     }
 
-    public synchronized void removerCliente(TCPServerConnection cliente) {
-        clientes.remove(cliente);
+    public synchronized void removeConnection(TCPServerConnection connection) {
+        connections.remove(connection);
         try {
-            cliente.getInput().close();
+            connection.getInput().close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        cliente.getOutput().close();
+        connection.getOutput().close();
         try {
-            cliente.getSocket().close();
+            connection.getSocket().close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public List getClientes() {
-        return clientes;
+    public List getConnections() {
+        return connections;
     }
 
     @Override
@@ -69,6 +69,4 @@ public class TCPServerAtivosMain extends Thread {
         super.finalize();
         this.server.close();
     }
-
-
 }
