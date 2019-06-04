@@ -1,46 +1,63 @@
 package Servidor;
 
-import com.sun.management.OperatingSystemMXBean;
 import java.io.File;
-import java.lang.management.ManagementFactory;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.*;
 
 public class HandlerDirectory {
 
-    public double cpu;
-    public double ram;
-    public double disk;
-    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+    public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
 
     public static void main(String[] args) {
-        System.out.println("Eu sou o seu primeiro programa.");
-        GetFiles();
-        MoveFile();
+        CreateFolder();
+        CreateFile("file.txt");
+        ListDirectory("\\Folder1");
+        ListDirectory("\\Folder2");
+        MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
+        DeleteFile(serverPath + "\\Folder2\\file.txt");
     }
 
-    public static void MoveFile() {
+    public static void CreateFolder() {
         try {
-            Path temp = Files.move(Paths.get("C:\\Users\\danie\\Documents\\NetbeansProjects\\Mainframe\\testeeee.txt"),
-                    Paths.get("C:\\Users\\danie\\Desktop\\445.txt"));
+            new File(serverPath).mkdirs();
+            new File(serverPath).mkdirs();
+            new File(serverPath + "\\Folder1").mkdirs();
+            new File(serverPath + "\\Folder2").mkdirs();
+        } catch (Exception e) {
+        }
+    }
 
+    public static void CreateFile(String fileName) {
+        try {
+            File file = new File(serverPath + "\\ServerMainframe\\Folder1\\" + fileName);
+            file.createNewFile();
+        } catch (Exception e) {
+        }
+    }
+
+    public static void MoveFile(String source, String destination) {
+        try {
+            Path temp = Files.move(
+                    Paths.get(source),
+                    Paths.get(destination)
+            );
             if (temp != null) {
                 System.out.println("File renamed and moved successfully");
             } else {
                 System.out.println("Failed to move the file");
             }
         } catch (Exception e) {
-
         }
     }
 
-    public static void GetFiles() {
+    public static void ListDirectory(String folderName) {
         try {
-            final File folder = new File("C:\\Users\\danie\\Documents\\NetbeansProjects\\Mainframe");
+            System.out.println("Listing folder: " + serverPath + folderName);
+            final File folder = new File(serverPath + folderName);
 
             List<String> result = new ArrayList<>();
 
@@ -56,17 +73,33 @@ public class HandlerDirectory {
 
     public static void search(final String pattern, final File folder, List<String> result) {
         for (final File f : folder.listFiles()) {
-
-            if (f.isDirectory()) {
-                search(pattern, f, result);
-            }
-
+            /*if (f.isDirectory()) {
+             search(pattern, f, result);
+             }*/
             if (f.isFile()) {
-                if (f.getName().matches(pattern)) {
-                    result.add(f.getAbsolutePath());
-                }
+                result.add(f.getAbsolutePath());
+            }
+        }
+    }
+
+    public static void CopyFile(String source, String destination) {
+        try {
+            FileInputStream fis = new FileInputStream(source);
+            FileOutputStream fos = new FileOutputStream(destination);
+
+            int b;
+            while ((b = fis.read()) != -1) {
+                fos.write(b);
             }
 
+            fis.close();
+            fos.close();
+        } catch (Exception e) {
         }
+    }
+
+    public static void DeleteFile(String fileName) {
+        File file = new File(serverPath + "\\ServerMainframe\\" + fileName);
+        file.delete();
     }
 }
