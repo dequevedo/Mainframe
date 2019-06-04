@@ -21,7 +21,7 @@ public class ServerCommandHandler extends Thread {
         while (true) {
             String message = this.connection.getMessage();
             if(message.equals("stats")){
-                this.connection.SendToClient("O sistema está rodando corretamente!");
+                this.connection.SendToClient("CPU Usage: "+stats.GetCPUUsage()+", RAM Usage: "+stats.GetRAMUsage());
             }
 //            try {
 //                socket = this.server.accept();
