@@ -31,11 +31,11 @@ public class TCPServerConnection {
         return socket;
     }
 
-    public BufferedReader getInput() {
-        return receiver.input;
+    public String getMessage() {
+        return receiver.dataRead;
     }
 
-    public PrintWriter getOutput() {
-        return sender.output;
+    public void SendToClient(String message) {
+        sender.Send(message);
     }
 }

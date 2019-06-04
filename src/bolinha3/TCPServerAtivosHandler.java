@@ -26,9 +26,8 @@ public class TCPServerAtivosHandler extends Thread {
     public synchronized void messageDispatcher(String message) throws IOException {
         List<TCPServerConnection> clientes = this.caller.getConnections();
         for (TCPServerConnection cli : clientes) {
-            if (cli.getSocket() != null && cli.getSocket().isConnected() && cli.getOutput() != null) {
-                cli.getOutput().println(message);
-                cli.getOutput().flush();
+            if (cli.getSocket() != null && cli.getSocket().isConnected() && cli.getMessage()!= "") {
+                cli.SendToClient(message);
             }
         }
     }
@@ -39,8 +38,8 @@ public class TCPServerAtivosHandler extends Thread {
         String message;
         while (true) {
             try {
-                if (this.cliente.getSocket().isConnected() && this.cliente.getInput() != null) {
-                    message = this.cliente.getInput().readLine();
+                if (this.cliente.getSocket().isConnected() && this.cliente.getMessage()!= "") {
+                    message = this.cliente.getMessage();
                 } else {
                     break;
                 }

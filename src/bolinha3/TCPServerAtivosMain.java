@@ -47,17 +47,17 @@ public class TCPServerAtivosMain extends Thread {
 
     public synchronized void removeConnection(TCPServerConnection connection) {
         connections.remove(connection);
-        try {
-            connection.getInput().close();
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        connection.getOutput().close();
-        try {
-            connection.getSocket().close();
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
+//        try {
+//            connection.getInput().close();
+//        } catch (IOException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+//        connection.getOutput().close();
+//        try {
+//            connection.getSocket().close();
+//        } catch (IOException ex) {
+//            System.out.println(ex.getMessage());
+//        }
     }
 
     public List getConnections() {
