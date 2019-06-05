@@ -20,8 +20,10 @@ public class ServerCommandHandler extends Thread {
         Socket socket;
         while (true) {
             String message = this.connection.getMessage();
-            if(message.equals("stats")){
+            if(message.equals("status")){
+                System.out.println("recebeu status");
                 this.connection.SendToClient("CPU Usage: "+stats.GetCPUUsage()+", RAM Usage: "+stats.GetRAMUsage());
+                System.out.println("enviou: "+"CPU Usage: "+stats.GetCPUUsage()+", RAM Usage: "+stats.GetRAMUsage());
             }
 //            try {
 //                socket = this.server.accept();

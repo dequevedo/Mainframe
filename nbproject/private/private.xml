@@ -5,9 +5,12 @@
         <group>
             <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/ClienteInterface.java</file>
             <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/Receive.java</file>
+            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/ServerCommandHandler.java</file>
             <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/Send.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/TCPClientMain.java</file>
             <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/TCPClientHandler.java</file>
+            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/Bolinha3Server.java</file>
+            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/TCPClientMain.java</file>
+            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/HandlerStats.java</file>
         </group>
     </open-files>
 </project-private>

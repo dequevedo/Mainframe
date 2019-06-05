@@ -7,10 +7,10 @@ import javax.swing.JOptionPane;
 
 public class ClienteInterface extends javax.swing.JFrame {
 
-    private boolean isConnected;
+    private boolean isConnected = false;
     
     public ClienteInterface() {
-        
+        initComponents();
     }
 
     /**
@@ -170,13 +170,17 @@ public class ClienteInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println("botão conectar pressionado");
         try {
+            
             String server = jTextField1.getText();
             int porta = Integer.parseInt(jTextField2.getText());
+            System.out.println("tentando se conectar");
             tcpClient = new TCPClientMain(server, porta, this);
             jButton1.setEnabled(false);
             jButton2.setEnabled(true);
             this.isConnected = true;
+            System.out.println("conectado!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     e.getMessage(), "ERRO", JOptionPane.ERROR_MESSAGE);
@@ -196,9 +200,12 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_messageTextActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        System.out.println("clicou em status");
         this.tcpClient.writeMessage("status");
         try {
+            System.out.println("try de ler mensagem");
             String message = this.tcpClient.readMessage();
+            System.out.println("recebeu a mensagem: "+message);
             this.jTextArea1.setText(message);
         } catch (IOException ex) {
             Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
