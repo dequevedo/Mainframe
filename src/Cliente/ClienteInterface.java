@@ -1,19 +1,16 @@
 package Cliente;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ClienteInterface extends javax.swing.JFrame {
 
-    Graphics g;
-    public int x;
-    public int y;
-    public int d;
-    public int inc;
-
+    private boolean isConnected;
+    
     public ClienteInterface() {
+        
     }
 
     /**
@@ -164,9 +161,9 @@ public class ClienteInterface extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(messageText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SendButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -179,6 +176,7 @@ public class ClienteInterface extends javax.swing.JFrame {
             tcpClient = new TCPClientMain(server, porta, this);
             jButton1.setEnabled(false);
             jButton2.setEnabled(true);
+            this.isConnected = true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     e.getMessage(), "ERRO", JOptionPane.ERROR_MESSAGE);
@@ -186,7 +184,11 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        closeConnection();
+        try {
+            closeConnection();
+        } catch (Throwable ex) {
+            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void messageTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTextActionPerformed
@@ -194,7 +196,13 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_messageTextActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+        this.tcpClient.writeMessage("status");
+        try {
+            String message = this.tcpClient.readMessage();
+            this.jTextArea1.setText(message);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.messageText.setEditable(false);
         this.SendButton.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -203,11 +211,12 @@ public class ClienteInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    public void closeConnection() {
+    public void closeConnection() throws Throwable {
         try {
             tcpClient.closeConnection();
             jButton1.setEnabled(true);
             jButton2.setEnabled(false);
+            this.isConnected = false;
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(), "ERRO", JOptionPane.ERROR_MESSAGE);
@@ -226,7 +235,6 @@ public class ClienteInterface extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel FilesPanel1;
     private javax.swing.JButton SendButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

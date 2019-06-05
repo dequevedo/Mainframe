@@ -32,11 +32,11 @@ public class TCPClientHandler extends Thread {
                     break;
                 }
                 StringTokenizer tok = new StringTokenizer(message, "|");
-                caller.x = Integer.parseInt(tok.nextToken());
-                caller.y = Integer.parseInt(tok.nextToken());
-                caller.d = Integer.parseInt(tok.nextToken());
-                caller.inc = Integer.parseInt(tok.nextToken());
-                caller.atualizaCampos();
+//                caller.x = Integer.parseInt(tok.nextToken());
+//                caller.y = Integer.parseInt(tok.nextToken());
+//                caller.d = Integer.parseInt(tok.nextToken());
+//                caller.inc = Integer.parseInt(tok.nextToken());
+                //caller.atualizaCampos();
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 break;

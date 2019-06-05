@@ -7,11 +7,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Receive extends Thread{
+public class Receive{
 
     public Socket socket;
     public BufferedReader input;
-    public String dataRead=""; 
 
     public Receive(Socket socket)  throws IOException {
         this.socket = socket;
@@ -27,15 +26,8 @@ public class Receive extends Thread{
         this.input.close();
         this.socket.close();
     }
-
-    @Override
-    public void run() {
-        while(true){
-            try {
-                this.dataRead = this.input.readLine();
-            } catch (IOException ex) {
-                System.out.println("Erro ao ler a mensagem: "+ex.getMessage());
-            }
-        }
+    
+    public String getData() throws IOException{
+        return this.input.readLine();
     }
 }
