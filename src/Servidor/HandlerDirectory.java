@@ -13,27 +13,26 @@ public class HandlerDirectory {
     public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
 
     public static void main(String[] args) {
-        CreateFolder();
-        CreateFile("file.txt");
-        ListDirectory("\\Folder1");
-        ListDirectory("\\Folder2");
+        CreateFolder("");
+        CreateFolder("Folder1");
+        CreateFolder("Folder2");
+        CreateFile("Folder1", "file.txt");
+        ListDirectory("Folder1");
+        ListDirectory("Folder2");
         MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
         DeleteFile(serverPath + "\\Folder2\\file.txt");
     }
 
-    public static void CreateFolder() {
+    public static void CreateFolder(String folderName) {
         try {
-            new File(serverPath).mkdirs();
-            new File(serverPath).mkdirs();
-            new File(serverPath + "\\Folder1").mkdirs();
-            new File(serverPath + "\\Folder2").mkdirs();
+            new File(serverPath + "\\" + folderName).mkdirs();
         } catch (Exception e) {
         }
     }
 
-    public static void CreateFile(String fileName) {
+    public static void CreateFile(String path, String fileName) {
         try {
-            File file = new File(serverPath + "\\ServerMainframe\\Folder1\\" + fileName);
+            File file = new File(serverPath + "\\" + path + "\\" + fileName);
             file.createNewFile();
         } catch (Exception e) {
         }
@@ -46,7 +45,7 @@ public class HandlerDirectory {
                     Paths.get(destination)
             );
             if (temp != null) {
-                System.out.println("File renamed and moved successfully");
+                System.out.println("File moved from '" + source + "' to '" + destination + "' successfully");
             } else {
                 System.out.println("Failed to move the file");
             }
@@ -57,7 +56,7 @@ public class HandlerDirectory {
     public static void ListDirectory(String folderName) {
         try {
             System.out.println("Listing folder: " + serverPath + folderName);
-            final File folder = new File(serverPath + folderName);
+            final File folder = new File(serverPath + "\\" + folderName);
 
             List<String> result = new ArrayList<>();
 

@@ -33,6 +33,10 @@ public class TCPServerConnection {
     public String getMessage() {
         return receiver.dataRead;
     }
+    
+    public void clearMessage(){
+        receiver.clearMessage();
+    }
 
     public void SendToClient(String message) {
         sender.Send(message);

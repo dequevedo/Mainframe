@@ -26,6 +26,10 @@ public class Receive extends Thread{
         this.input.close();
         this.socket.close();
     }
+    
+    public void clearMessage(){
+        dataRead = "";
+    }
 
     @Override
     public void run() {
