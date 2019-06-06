@@ -20,8 +20,8 @@ public class Send {
     }
 
     public void Send(String message) {
-        System.out.println("enviou '"+message+"' para o servidor");
         this.output.println(message);
+        System.out.println("enviou '"+message+"' para o servidor"+" - error: "+this.output.checkError());
         this.output.flush();
     }
 

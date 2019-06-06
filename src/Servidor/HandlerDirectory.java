@@ -12,76 +12,115 @@ public class HandlerDirectory {
 
     public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
 
-    public static void main(String[] args) {
-        CreateFolder("");
-        CreateFolder("Folder1");
-        CreateFolder("Folder2");
-        CreateFile("Folder1", "file.txt");
-        ListDirectory("Folder1");
-        ListDirectory("Folder2");
-        MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
-        DeleteFile(serverPath + "\\Folder2\\file.txt");
+//    public static void main(String[] args) {;
+//        CreateFolder("");
+//        CreateFolder("Folder1");
+//        CreateFolder("Folder2");
+//        CreateFile("Folder1", "file.txt");
+//        ListDirectory("Folder1");
+//        ListDirectory("Folder2");
+//        MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
+//        DeleteFile(serverPath + "\\Folder2\\file.txt");
+//    }
+    public String getStatus() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Directory: ");
+        sb.append(serverPath);
+        sb.append("\t");
+        sb.append("Contains Files:");
+        List<String> fileList = new ArrayList<>();
+        final File folder = new File(serverPath);
+        
+        search(".*\\.java", folder, fileList);
+        
+        for(String fileName: fileList){
+            sb.append("\t");
+            sb.append(fileName);
+        }
+//        sb.append("you can: \t");
+//        sb.append("\t Create");
+//        sb.append("\t Move");
+//        sb.append("\t Copy");
+//        sb.append("\t Delete");
+        return sb.toString();
     }
 
-    public static void CreateFolder(String folderName) {
+    public String CreateFolder(String folderName) {
+        String messageReturn = "";
         try {
             new File(serverPath + "\\" + folderName).mkdirs();
+            messageReturn = "Folder '" + folderName + "' Created";
         } catch (Exception e) {
+            messageReturn = "Failed to create the folder: " + e.getMessage();
         }
+        return messageReturn;
     }
 
-    public static void CreateFile(String path, String fileName) {
+    public String CreateFile(String path, String fileName) {
+        String messageReturn = "";
         try {
+
             File file = new File(serverPath + "\\" + path + "\\" + fileName);
             file.createNewFile();
+            messageReturn = "File Created: " + file.getAbsolutePath();
         } catch (Exception e) {
+            messageReturn = "Failed to create the file: " + e.getMessage();
         }
+        return messageReturn;
     }
 
-    public static void MoveFile(String source, String destination) {
+    public String MoveFile(String source, String destination) {
+        String messageReturn = "";
         try {
             Path temp = Files.move(
                     Paths.get(source),
                     Paths.get(destination)
             );
             if (temp != null) {
-                System.out.println("File moved from '" + source + "' to '" + destination + "' successfully");
+                messageReturn = "File moved from '" + source + "' to '" + destination + "' successfully";
+                System.out.println(messageReturn);
             } else {
-                System.out.println("Failed to move the file");
+                messageReturn = "Failed to move the file";
+                System.out.println(messageReturn);
             }
         } catch (Exception e) {
+            messageReturn = "Failed to move the file: " + e.getMessage();
+            System.out.println(messageReturn);
         }
+        return messageReturn;
     }
 
-    public static void ListDirectory(String folderName) {
+    public List<String> ListDirectory(String folderName) {
+        List<String> result = new ArrayList<>();
         try {
-            System.out.println("Listing folder: " + serverPath + folderName);
+            System.out.println("Listing folder: " + serverPath + "\\" + folderName);
             final File folder = new File(serverPath + "\\" + folderName);
-
-            List<String> result = new ArrayList<>();
 
             search(".*\\.java", folder, result);
 
             for (String s : result) {
                 System.out.println(s);
             }
+            return result;
         } catch (Exception e) {
 
         }
+        return result;
     }
 
-    public static void search(final String pattern, final File folder, List<String> result) {
+    public void search(final String pattern, final File folder, List<String> result) {
         for (final File f : folder.listFiles()) {
             /*if (f.isDirectory()) {
              search(pattern, f, result);
              }*/
             if (f.isFile()) {
-                result.add(f.getAbsolutePath());
+                result.add(f.getName());
             }
         }
     }
 
-    public static void CopyFile(String source, String destination) {
+    public String CopyFile(String source, String destination) {
+        String messageReturn = "";
         try {
             FileInputStream fis = new FileInputStream(source);
             FileOutputStream fos = new FileOutputStream(destination);
@@ -93,12 +132,27 @@ public class HandlerDirectory {
 
             fis.close();
             fos.close();
+
+            messageReturn = "File copied from '" + source + "' to '" + destination + "' successfully";
+            System.out.println(messageReturn);
         } catch (Exception e) {
+            messageReturn = "Failed to copy the file: " + e.getMessage();
+            System.out.println(messageReturn);
         }
+        return messageReturn;
     }
 
-    public static void DeleteFile(String fileName) {
-        File file = new File(serverPath + "\\ServerMainframe\\" + fileName);
-        file.delete();
+    public String DeleteFile(String fileName) {
+        String messageReturn = "";
+        try {
+            File file = new File(serverPath + "\\ServerMainframe\\" + fileName);
+            file.delete();
+            messageReturn = "File '" + fileName + "' deleted successfully";
+            System.out.println(messageReturn);
+        } catch (Exception e) {
+            messageReturn = "Failed to delete the file: " + e.getMessage();
+            System.out.println(messageReturn);
+        }
+        return messageReturn;
     }
 }

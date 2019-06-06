@@ -201,13 +201,13 @@ public class ClienteInterface extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         System.out.println("clicou em status");
-        this.tcpClient.writeMessage("status");
         try {
             System.out.println("try de ler mensagem");
+            this.tcpClient.writeMessage("status");
             String message = this.tcpClient.readMessage();
             System.out.println("recebeu a mensagem: "+message);
             this.jTextArea1.setText(message);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.messageText.setEditable(false);
@@ -215,7 +215,20 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        System.out.println("clicou em status");
+        try {
+            System.out.println("try de ler mensagem");
+            this.tcpClient.writeMessage("files");
+            String message = this.tcpClient.readMessage();
+            System.out.println("recebeu a mensagem: "+message);
+            this.jTextArea1.setText(message);
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.messageText.setEditable(true);
+        this.SendButton.setEnabled(true);
+
+// TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     public void closeConnection() throws Throwable {

@@ -15,15 +15,41 @@ public class HandlerStats {
     }
 
     public double GetCPUUsage() {
-        File cDrive = new File("C:");
-        System.out.println(String.format("Total space: %.2f GB",
-                (double) cDrive.getTotalSpace() / 1073741824));
-        System.out.println(String.format("Free space: %.2f GB",
-                (double) cDrive.getFreeSpace() / 1073741824));
-        System.out.println(String.format("Usable space: %.2f GB",
-                (double) cDrive.getUsableSpace() / 1073741824));
-
         return osBean.getProcessCpuLoad();
+    }
+
+    public String getStatus() {
+        File cDrive = new File("C:");
+        String messageReturn = "";
+        StringBuilder sb = new StringBuilder();
+
+        //CPU USAGE
+        sb.append("CPU Usage: ");
+        sb.append(GetCPUUsage());
+        sb.append("\t");
+
+        //RAM USAGE
+        sb.append("RAM Usage: ");
+        sb.append(GetRAMUsage());
+        sb.append("\t");
+
+        //STORAGE USAGE
+        sb.append(String.format("Total space: %.2f GB",
+                (double) cDrive.getTotalSpace() / 1073741824));
+        sb.append("\t");
+        sb.append(String.format("Total space: %.2f GB",
+                (double) cDrive.getTotalSpace() / 1073741824));
+        sb.append("\t");
+        sb.append(String.format("Free space: %.2f GB",
+                (double) cDrive.getFreeSpace() / 1073741824));
+        sb.append("\t");
+        sb.append(String.format("Usable space: %.2f GB",
+                (double) cDrive.getUsableSpace() / 1073741824));
+        sb.append("\t");
+
+        messageReturn = sb.toString();
+
+        return messageReturn;
     }
 
     public double GetRAMUsage() {
