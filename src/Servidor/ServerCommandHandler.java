@@ -13,6 +13,7 @@ public class ServerCommandHandler extends Thread {
     private Socket socket;
     private HandlerStats stats;
     private HandlerDirectory directory;
+    private HandlerChatbot chatbot;
     private TCPServerConnection connection;
     private BufferedReader input;
 
@@ -22,6 +23,7 @@ public class ServerCommandHandler extends Thread {
         this.connection = new TCPServerConnection(socket);
         stats = new HandlerStats();
         directory = new HandlerDirectory();
+        chatbot = new HandlerChatbot();
     }
 
     @Override
@@ -29,8 +31,6 @@ public class ServerCommandHandler extends Thread {
         Socket socket;
 
         while (true) {
-
-            System.out.print(".");
             //String fullMessage = this.connection.getMessage();
             String fullMessage = "";
             try {
@@ -44,29 +44,37 @@ public class ServerCommandHandler extends Thread {
                 //System.out.println(fullMessage);
                 StringTokenizer tok = new StringTokenizer(fullMessage, "|");
                 String[] subMessages = new String[tok.countTokens()];
-
-                for (int i = 0; i < tok.countTokens(); i++) {
+                
+                int i=0;
+                while(tok.hasMoreElements()){
                     subMessages[i] = tok.nextToken();
-                    //System.out.println("Mensagem " + i + " " + subMessages[i]);
+                    i++;
                 }
 
                 switch (subMessages[0]) {
                     case "files":
-                        System.out.println("recebeu files");
                         System.out.println(directory.getStatus());
                         String messageReturn = directory.getStatus();
                         System.out.println("GetStatus: " + messageReturn);
                         this.connection.SendToClient(messageReturn);
                         break;
                     case "status":
-                        System.out.println("recebeu status");
                         this.connection.SendToClient(stats.getStatus());
                         System.out.println(stats.getStatus());
                         break;
                     case "chatbot":
-                        System.out.println("recebeu chatbot");
-                        this.connection.SendToClient("CPU Usage: " + stats.GetCPUUsage() + ", RAM Usage: " + stats.GetRAMUsage());
-                        System.out.println("enviou: " + "CPU Usage: " + stats.GetCPUUsage() + ", RAM Usage: " + stats.GetRAMUsage());
+                        if (subMessages.length >= 2) {
+                            if (subMessages[1] != null) {
+                                if (subMessages[1].equals("none")) {
+                                    System.out.println("none");
+                                    this.connection.SendToClient("Olá! faça-me uma pergunta! :D");
+                                } else {
+                                    System.out.println("returnAnswer");
+                                    this.connection.SendToClient(this.chatbot.returnAnswer(fullMessage));
+                                    System.out.println("enviou para o cliente: "+this.chatbot.returnAnswer(fullMessage));
+                                }
+                            }
+                        }
                         break;
                     case "database":
                         System.out.println("recebeu database");
