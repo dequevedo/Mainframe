@@ -7,13 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.*;
+import java.util.StringTokenizer;
 
 public class HandlerDirectory {
 
     public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
+    public static String actualPath = serverPath;
 
-    /*public static void main(String[] args) {
-        System.out.println(DeleteFile(0));
+    public static void main(String[] args) {
+        System.out.println(NavigateForward("oiu"));
+        System.out.println(NavigateBack());
+        System.out.println(NavigateBack());
+        /*System.out.println(DeleteFile(0));
         CreateFolder("");
         CreateFolder("Folder1");
         CreateFolder("Folder2");
@@ -21,8 +26,55 @@ public class HandlerDirectory {
         ListDirectory("Folder1");
         ListDirectory("Folder2");
         MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
-        DeleteFile(serverPath + "\\Folder2\\file.txt");
-    }*/
+        DeleteFile(serverPath + "\\Folder2\\file.txt");*/
+    }
+
+    public static String NavigateForward(String folderName) {
+
+        File path = new File(actualPath);
+
+        int i = 0;
+        for (String nome : path.list()) {
+            if (folderName.equals(nome)) {
+                File file = new File(actualPath + "\\" + folderName);
+                if (file.isDirectory()) {
+                    actualPath = actualPath + "\\" + folderName;
+                    return "Successfully navigated to folder: " + actualPath;
+                }
+            }
+            i++;
+        }
+
+        return "Directory " + folderName + " not found";
+    }
+
+    public static String NavigateBack() {
+        StringTokenizer st = new StringTokenizer(actualPath, "\\");
+        StringBuilder sb = new StringBuilder();
+        List<String> elements = new ArrayList<>();
+
+        while (st.hasMoreTokens()) {
+            elements.add(st.nextToken());
+        }
+
+        elements.remove(elements.size() - 1);
+
+        for (int i = 0; i < elements.size(); i++) {
+            sb.append(elements.get(i));
+            if (i != elements.size() - 1) {
+                sb.append("\\");
+            }
+        }
+
+        String targetPath = sb.toString();
+
+        if (actualPath.equals(serverPath)) {
+            return "Already at root path: " + actualPath;
+        } else {
+            actualPath = targetPath;
+            return "Successfully returned to folder: " + actualPath;
+        }
+    }
 
     public String getStatus() {
         CreateFolder("");
@@ -163,7 +215,7 @@ public class HandlerDirectory {
             }
             i++;
         }
-        
+
         return "Failed to delete the file with id[" + id + "]";
     }
 }
