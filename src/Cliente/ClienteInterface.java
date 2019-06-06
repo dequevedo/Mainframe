@@ -9,7 +9,7 @@ public class ClienteInterface extends javax.swing.JFrame {
 
     private boolean isConnected = false;
     private String command = "status";
-    
+
     public ClienteInterface() {
         initComponents();
     }
@@ -79,6 +79,11 @@ public class ClienteInterface extends javax.swing.JFrame {
         });
 
         jButton5.setText("Chatbot");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Database");
 
@@ -178,7 +183,7 @@ public class ClienteInterface extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("botão conectar pressionado");
         try {
-            
+
             String server = jTextField1.getText();
             int porta = Integer.parseInt(jTextField2.getText());
             System.out.println("tentando se conectar");
@@ -208,16 +213,7 @@ public class ClienteInterface extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.command = "status";
         System.out.println("clicou em status");
-        try {
-            System.out.println("try de ler mensagem");
-            this.tcpClient.writeMessage(this.command);
-            this.tcpClient.writeMessage(this.command);
-            String message = this.tcpClient.readMessage();
-            System.out.println("recebeu a mensagem: "+message);
-            this.jTextArea1.setText(message);
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        sendAndWait(command);
         this.messageText.setEditable(false);
         this.SendButton.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -225,16 +221,8 @@ public class ClienteInterface extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.command = "files";
         System.out.println("clicou em files");
-        try {
-            System.out.println("try de ler mensagem");
-            this.tcpClient.writeMessage(this.command);
-            this.tcpClient.writeMessage(this.command);
-            String message = this.tcpClient.readMessage();
-            System.out.println("recebeu a mensagem: "+message);
-            this.jTextArea1.setText(message);
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        sendAndWait(this.command);
+        
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
 
@@ -242,8 +230,30 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
-        // TODO add your handling code here:
+        sendAndWait(this.command + "|" + this.messageText.getText());
     }//GEN-LAST:event_SendButtonActionPerformed
+
+    public void sendAndWait(String messageToSend) {
+        try {
+            this.tcpClient.writeMessage(messageToSend);
+            this.tcpClient.writeMessage(messageToSend);
+            String message = this.tcpClient.readMessage();
+            System.out.println("recebeu a mensagem: " + message);
+            message = message.replace(";", "\n");
+            this.jTextArea1.setText(this.command + "\n\n" + message);
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        this.command = "chatbot";
+        System.out.println("clicou em chatbot");
+        sendAndWait(this.command + "|none");
+ 
+        this.messageText.setEditable(true);
+        this.SendButton.setEnabled(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     public void closeConnection() throws Throwable {
         try {
