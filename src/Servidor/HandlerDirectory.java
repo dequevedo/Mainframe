@@ -16,16 +16,12 @@ public class HandlerDirectory {
 
     public static void main(String[] args) {
         System.out.println(NavigateForward("oiu"));
-        System.out.println(NavigateBack());
-        System.out.println(NavigateBack());
-        /*System.out.println(DeleteFile(0));
-        CreateFolder("");
-        CreateFolder("Folder1");
-        CreateFolder("Folder2");
-        CreateFile("Folder1", "file.txt");
-        ListDirectory("Folder1");
-        ListDirectory("Folder2");
-        MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
+        System.out.println(CreateFolder("pao"));
+        System.out.println(CreateFile("arquivo.txt"));
+        System.out.println(ListDirectory());
+        System.out.println(DeleteFile(1));
+        System.out.println(ListDirectory());
+        /*MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
         DeleteFile(serverPath + "\\Folder2\\file.txt");*/
     }
 
@@ -76,15 +72,15 @@ public class HandlerDirectory {
         }
     }
 
-    public String getStatus() {
+    public static String FolderStatus() {
         CreateFolder("");
         StringBuilder sb = new StringBuilder();
         sb.append("Directory: ");
-        sb.append(serverPath);
+        sb.append(actualPath);
         sb.append("\t");
         sb.append("Contains Files:");
         List<String> fileList = new ArrayList<>();
-        final File folder = new File(serverPath);
+        final File folder = new File(actualPath);
         System.out.println("folder " + folder.getName());
 
         fileList = search(folder);
@@ -102,10 +98,10 @@ public class HandlerDirectory {
         return sb.toString();
     }
 
-    public String CreateFolder(String folderName) {
+    public static String CreateFolder(String folderName) {
         String messageReturn = "";
         try {
-            new File(serverPath + "\\" + folderName).mkdirs();
+            new File(actualPath + "\\" + folderName).mkdirs();
             messageReturn = "Folder '" + folderName + "' Created";
         } catch (Exception e) {
             messageReturn = "Failed to create the folder: " + e.getMessage();
@@ -113,11 +109,11 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public String CreateFile(String path, String fileName) {
+    public static String CreateFile(String fileName) {
         String messageReturn = "";
         try {
 
-            File file = new File(serverPath + "\\" + path + "\\" + fileName);
+            File file = new File(actualPath + "\\" + fileName);
             file.createNewFile();
             messageReturn = "File Created: " + file.getAbsolutePath();
         } catch (Exception e) {
@@ -147,36 +143,34 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public List<String> ListDirectory(String folderName) {
+    public static String ListDirectory() {
         List<String> result = new ArrayList<>();
         try {
-            System.out.println("Listing folder: " + serverPath + "\\" + folderName);
-            final File folder = new File(serverPath + "\\" + folderName);
+            System.out.println("Listing folder: " + actualPath);
+            final File folder = new File(actualPath);
 
             result = search(folder);
 
+            StringBuilder sb = new StringBuilder();
+
             for (String s : result) {
-                System.out.println(s);
+                sb.append(s);
+                sb.append("\n");
             }
-            return result;
+            return sb.toString();
         } catch (Exception e) {
 
         }
-        return result;
+        return "Erro ao listar";
     }
 
-    public List<String> search(final File folder) {
+    private static List<String> search(final File folder) {
         List<String> result = new ArrayList<>();
         folder.list();
         int i = 0;
         for (String nome : folder.list()) {
             result.add("[" + i++ + "] " + nome);
         }
-        /*for (final File f : folder.listFiles()) {
-            if (f.isFile()) {
-                result.add(f.getName());
-            }
-        }*/
         return result;
     }
 
@@ -203,13 +197,13 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public String DeleteFile(int id) {
-        File path = new File(serverPath);
+    public static String DeleteFile(int id) {
+        File path = new File(actualPath);
 
         int i = 0;
         for (String nome : path.list()) {
             if (i == id) {
-                File file = new File(serverPath + "\\" + nome);
+                File file = new File(actualPath + "\\" + nome);
                 file.delete();
                 return "File '" + nome + "' deleted successfully";
             }
