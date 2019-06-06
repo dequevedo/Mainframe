@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 public class ClienteInterface extends javax.swing.JFrame {
 
     private boolean isConnected = false;
+    private String command = "status";
     
     public ClienteInterface() {
         initComponents();
@@ -93,6 +94,11 @@ public class ClienteInterface extends javax.swing.JFrame {
 
         SendButton.setText("Send");
         SendButton.setEnabled(false);
+        SendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendButtonActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -200,10 +206,12 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_messageTextActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        this.command = "status";
         System.out.println("clicou em status");
         try {
             System.out.println("try de ler mensagem");
-            this.tcpClient.writeMessage("status");
+            this.tcpClient.writeMessage(this.command);
+            this.tcpClient.writeMessage(this.command);
             String message = this.tcpClient.readMessage();
             System.out.println("recebeu a mensagem: "+message);
             this.jTextArea1.setText(message);
@@ -215,10 +223,12 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        System.out.println("clicou em status");
+        this.command = "files";
+        System.out.println("clicou em files");
         try {
             System.out.println("try de ler mensagem");
-            this.tcpClient.writeMessage("files");
+            this.tcpClient.writeMessage(this.command);
+            this.tcpClient.writeMessage(this.command);
             String message = this.tcpClient.readMessage();
             System.out.println("recebeu a mensagem: "+message);
             this.jTextArea1.setText(message);
@@ -230,6 +240,10 @@ public class ClienteInterface extends javax.swing.JFrame {
 
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SendButtonActionPerformed
 
     public void closeConnection() throws Throwable {
         try {

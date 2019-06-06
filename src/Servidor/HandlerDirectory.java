@@ -23,6 +23,7 @@ public class HandlerDirectory {
 //        DeleteFile(serverPath + "\\Folder2\\file.txt");
 //    }
     public String getStatus() {
+        CreateFolder("");
         StringBuilder sb = new StringBuilder();
         sb.append("Directory: ");
         sb.append(serverPath);
@@ -30,9 +31,10 @@ public class HandlerDirectory {
         sb.append("Contains Files:");
         List<String> fileList = new ArrayList<>();
         final File folder = new File(serverPath);
+        System.out.println("folder "+folder.getName());
         
-        search(".*\\.java", folder, fileList);
-        
+        fileList = search(folder);
+        System.out.println(sb.toString());
         for(String fileName: fileList){
             sb.append("\t");
             sb.append(fileName);
@@ -42,6 +44,7 @@ public class HandlerDirectory {
 //        sb.append("\t Move");
 //        sb.append("\t Copy");
 //        sb.append("\t Delete");
+        System.out.println(sb.toString());
         return sb.toString();
     }
 
@@ -96,7 +99,7 @@ public class HandlerDirectory {
             System.out.println("Listing folder: " + serverPath + "\\" + folderName);
             final File folder = new File(serverPath + "\\" + folderName);
 
-            search(".*\\.java", folder, result);
+            result = search(folder);
 
             for (String s : result) {
                 System.out.println(s);
@@ -108,15 +111,14 @@ public class HandlerDirectory {
         return result;
     }
 
-    public void search(final String pattern, final File folder, List<String> result) {
+    public List<String> search(final File folder) {
+        List<String> result = new ArrayList<>();
         for (final File f : folder.listFiles()) {
-            /*if (f.isDirectory()) {
-             search(pattern, f, result);
-             }*/
             if (f.isFile()) {
                 result.add(f.getName());
             }
         }
+        return result;
     }
 
     public String CopyFile(String source, String destination) {

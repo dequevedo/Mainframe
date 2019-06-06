@@ -28,6 +28,8 @@ public class TCPServerAtivosMain extends Thread {
             try {
                 socket = this.server.accept();
                 ServerCommandHandler serverCommandHandler = new ServerCommandHandler(socket);
+                this.serverCommandHandlerList.add(serverCommandHandler);
+                System.out.println("novo cliente: "+this.serverCommandHandlerList.size());
                 newServer(serverCommandHandler);
                 serverCommandHandler.start();
             } catch (IOException ex) {
