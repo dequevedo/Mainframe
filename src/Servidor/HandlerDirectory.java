@@ -113,11 +113,15 @@ public class HandlerDirectory {
 
     public List<String> search(final File folder) {
         List<String> result = new ArrayList<>();
-        for (final File f : folder.listFiles()) {
+        folder.list();
+        for(String nome : folder.list()){
+            result.add(nome);
+        }
+        /*for (final File f : folder.listFiles()) {
             if (f.isFile()) {
                 result.add(f.getName());
             }
-        }
+        }*/
         return result;
     }
 
