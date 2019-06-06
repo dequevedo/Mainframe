@@ -53,8 +53,8 @@ public class ServerCommandHandler extends Thread {
 
                 switch (subMessages[0]) {
                     case "files":
-                        System.out.println(directory.getStatus());
-                        String messageReturn = directory.getStatus();
+                        System.out.println(directory.FolderStatus());
+                        String messageReturn = directory.FolderStatus();
                         System.out.println("GetStatus: " + messageReturn);
                         this.connection.SendToClient(messageReturn);
                         break;

@@ -15,12 +15,13 @@ public class HandlerDirectory {
     public static String actualPath = serverPath;
 
     public static void main(String[] args) {
-        System.out.println(NavigateForward("oiu"));
+        /*System.out.println(NavigateForward("oiu"));
         System.out.println(CreateFolder("pao"));
         System.out.println(CreateFile("arquivo.txt"));
         System.out.println(ListDirectory());
         System.out.println(DeleteFile(1));
         System.out.println(ListDirectory());
+        System.out.println(FolderStatus());*/
         /*MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
         DeleteFile(serverPath + "\\Folder2\\file.txt");*/
     }
@@ -75,25 +76,16 @@ public class HandlerDirectory {
     public static String FolderStatus() {
         CreateFolder("");
         StringBuilder sb = new StringBuilder();
-        sb.append("Directory: ");
+        sb.append("Directory:");
         sb.append(actualPath);
         sb.append("\t");
-        sb.append("Contains Files:");
-        List<String> fileList = new ArrayList<>();
-        final File folder = new File(actualPath);
-        System.out.println("folder " + folder.getName());
-
-        fileList = search(folder);
-        System.out.println(sb.toString());
-        for (String fileName : fileList) {
-            sb.append("\t");
-            sb.append(fileName);
-        }
-//        sb.append("you can: \t");
-//        sb.append("\t Create");
-//        sb.append("\t Move");
-//        sb.append("\t Copy");
-//        sb.append("\t Delete");
+        sb.append(";Content:;");
+        sb.append(";" + ListDirectory());
+        sb.append("; Available commands: \t");
+        sb.append("\t Create");
+        sb.append("\t Move");
+        sb.append("\t Copy");
+        sb.append("\t Delete");
         System.out.println(sb.toString());
         return sb.toString();
     }
@@ -154,8 +146,8 @@ public class HandlerDirectory {
             StringBuilder sb = new StringBuilder();
 
             for (String s : result) {
-                sb.append(s);
-                sb.append("\n");
+                sb.append("   " + s);
+                sb.append(";");
             }
             return sb.toString();
         } catch (Exception e) {
