@@ -114,8 +114,9 @@ public class HandlerDirectory {
     public List<String> search(final File folder) {
         List<String> result = new ArrayList<>();
         folder.list();
+        int i = 0;
         for(String nome : folder.list()){
-            result.add(nome);
+            result.add("[" + i++ + "] " + nome);
         }
         /*for (final File f : folder.listFiles()) {
             if (f.isFile()) {
