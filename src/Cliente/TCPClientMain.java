@@ -10,13 +10,14 @@ import javax.swing.JTextArea;
 
 public class TCPClientMain {
 
-    private BufferedReader input;
     private PrintWriter output;
+    private Receive receiver;
     private Socket socket;
 
     public TCPClientMain(String serverAddress, int serverPort, ClienteInterface caller) throws UnknownHostException, IOException {
         this.socket = new Socket(serverAddress, serverPort);
-        this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        this.receiver = new Receive(this.socket, caller);
+        this.receiver.start();
         this.output = new PrintWriter(this.socket.getOutputStream(), true);
 
     }
@@ -24,10 +25,6 @@ public class TCPClientMain {
     public void writeMessage(String outMessage) {
         this.output.println(outMessage);
         this.output.flush();
-    }
-
-    public String readMessage() throws IOException {
-        return this.input.readLine();
     }
 
     public void closeConnection() throws IOException, Throwable {

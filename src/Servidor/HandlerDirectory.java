@@ -14,8 +14,7 @@ public class HandlerDirectory {
     public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
     public static String actualPath = serverPath;
 
-
-    public static String NavigateForward(String folderName) {
+    public String NavigateForward(String folderName) {
 
         File path = new File(actualPath);
 
@@ -34,7 +33,7 @@ public class HandlerDirectory {
         return "Directory " + folderName + " not found";
     }
 
-    public static String NavigateBack() {
+    public String NavigateBack() {
         StringTokenizer st = new StringTokenizer(actualPath, "\\");
         StringBuilder sb = new StringBuilder();
         List<String> elements = new ArrayList<>();
@@ -192,5 +191,15 @@ public class HandlerDirectory {
         }
 
         return "Failed to delete the file with id[" + id + "]";
+    }
+
+    public String DeleteFile(String fileName) {
+        try {
+            File file = new File(actualPath + "\\" + fileName);
+            file.delete();
+            return "File '" + fileName + "' deleted successfully";
+        } catch (Exception e) {
+            return "Failed to delete the file " + fileName;
+        }
     }
 }

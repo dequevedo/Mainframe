@@ -40,7 +40,6 @@ public class ClienteInterface extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         nameText = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,14 +127,6 @@ public class ClienteInterface extends javax.swing.JFrame {
             }
         });
 
-        jButton9.setText("Refresh Message");
-        jButton9.setToolTipText("");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,8 +147,7 @@ public class ClienteInterface extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jButton2))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -183,10 +173,6 @@ public class ClienteInterface extends javax.swing.JFrame {
                                 .addComponent(SendButton)))
                         .addGap(9, 9, 9)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(222, 222, 222)
-                .addComponent(jButton9)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,9 +200,7 @@ public class ClienteInterface extends javax.swing.JFrame {
                     .addComponent(SendButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -252,10 +236,14 @@ public class ClienteInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_messageTextActionPerformed
 
+    public void setjText(String message){
+        this.jTextArea1.setText(this.command+"\n"+message);
+    }
+    
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.command = "status";
         System.out.println("clicou em status");
-        sendAndWait(command);
+        sendToServer(command);
         this.messageText.setEditable(false);
         this.SendButton.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -263,7 +251,7 @@ public class ClienteInterface extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.command = "files";
         System.out.println("clicou em files");
-        sendAndWait(this.command);
+        sendToServer(this.command);
 
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
@@ -272,33 +260,31 @@ public class ClienteInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
-        sendAndWait(this.command + "|" + this.messageText.getText());
+        if(this.command.equals("files")){
+            String message = this.messageText.getText().replace(" ", "|");
+            System.out.println("message pipeada: "+message);
+            sendToServer(this.command + "|" + message);
+        }else{
+            sendToServer(this.command + "|" + this.messageText.getText());
+        }
     }//GEN-LAST:event_SendButtonActionPerformed
 
-    public void sendAndWait(String messageToSend) {
-        try {
+    public void sendToServer(String messageToSend) {
             this.tcpClient.writeMessage(messageToSend);
             this.tcpClient.writeMessage(messageToSend);
-            String message = this.tcpClient.readMessage();
-            System.out.println("recebeu a mensagem: " + message);
-            message = message.replace(";", "\n");
-            this.jTextArea1.setText(this.command + "\n\n" + message);
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         this.command = "chatbot";
         System.out.println("clicou em chatbot");
-        sendAndWait(this.command + "|none");
+        sendToServer(this.command + "|none");
 
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        sendAndWait("name|" + this.nameText.getText());
+        sendToServer("name|" + this.nameText.getText());
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
@@ -306,16 +292,8 @@ public class ClienteInterface extends javax.swing.JFrame {
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
         this.command = "talk";
-        sendAndWait(command);
+        sendToServer(command);
     }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        try {
-            sendAndWait(command);
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton9ActionPerformed
 
     public void closeConnection() throws Throwable {
         try {
@@ -350,7 +328,6 @@ public class ClienteInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

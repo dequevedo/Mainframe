@@ -29,8 +29,8 @@ public class ServerCommandHandler extends Thread {
         directory = new HandlerDirectory();
         chatbot = new HandlerChatbot();
     }
-    
-    public void sendMessage(String message){
+
+    public void sendMessage(String message) {
         this.connection.SendToClient(message);
     }
 
@@ -54,17 +54,53 @@ public class ServerCommandHandler extends Thread {
                 int i = 0;
                 while (tok.hasMoreElements()) {
                     subMessages[i] = tok.nextToken();
-                    System.out.println("tok["+i+"] = "+subMessages[i]);
+                    System.out.println("tok[" + i + "] = " + subMessages[i]);
                     i++;
                 }
 
                 switch (subMessages[0]) {
                     case "files":
                         canTalk = false;
-                        System.out.println(directory.FolderStatus());
-                        String messageReturn = directory.FolderStatus();
-                        System.out.println("GetStatus: " + messageReturn);
-                        this.connection.SendToClient(messageReturn);
+                        if (subMessages.length >= 3) {
+                            if (subMessages[1] != null) {
+                                if (subMessages[1].equals("cd") || subMessages[1].equals("cd ")) {
+                                    if (subMessages[2].equals("..") || subMessages[2].equals(".. ")) {
+                                        this.connection.SendToClient(";;--------" + this.directory.NavigateBack() + "--------;;" + this.directory.FolderStatus());
+                                    } else if (!subMessages[2].equals("") && subMessages[2] != null) {
+                                        this.connection.SendToClient(";;--------" + this.directory.NavigateForward(subMessages[2])
+                                                + "--------;;" + this.directory.FolderStatus());
+                                    }
+                                } else if (subMessages[1].equals("createfile") || subMessages[1].equals("createfile ")) {
+                                    if (!subMessages[2].equals("") && subMessages[2] != null) {
+                                        this.connection.SendToClient(";;--------" + this.directory.CreateFile(subMessages[2])
+                                                + "--------;;" + this.directory.FolderStatus());
+                                    }
+                                } else if (subMessages[1].equals("createfolder") || subMessages[1].equals("createfolder ")) {
+                                    if (!subMessages[2].equals("") && subMessages[2] != null) {
+                                        this.connection.SendToClient(";;--------" + this.directory.CreateFolder(subMessages[2])
+                                                + "--------;;" + this.directory.FolderStatus());
+                                    }
+                                } else if (subMessages[1].equals("copy") || subMessages[1].equals("copy ")) {
+                                    if (!subMessages[2].equals("") && subMessages[2] != null && !subMessages[3].equals("") && subMessages[3] != null) {
+                                        this.connection.SendToClient(";;--------" + this.directory.CopyFile(subMessages[2], subMessages[3])
+                                                + "--------;;" + this.directory.FolderStatus());
+                                    }
+                                } else if (subMessages[1].equals("move") || subMessages[1].equals("move ")) {
+                                    if (!subMessages[2].equals("") && subMessages[2] != null && !subMessages[3].equals("") && subMessages[3] != null) {
+                                        this.connection.SendToClient(";;--------" + this.directory.MoveFile(subMessages[2], subMessages[3])
+                                                + "--------;;" + this.directory.FolderStatus());
+                                    }
+                                } else if (subMessages[1].equals("delete") || subMessages[1].equals("delete ")) {
+                                    if (!subMessages[2].equals("") && subMessages[2] != null) {
+                                        this.connection.SendToClient(";;--------" + this.directory.DeleteFile(subMessages[2])
+                                                + "--------;;" + this.directory.FolderStatus());
+                                    }
+                                }
+                            }
+                        } else if (subMessages.length == 1) {
+                            this.connection.SendToClient(this.directory.FolderStatus());
+                        }
+
                         break;
                     case "status":
                         canTalk = false;
@@ -94,18 +130,22 @@ public class ServerCommandHandler extends Thread {
                     case "talk":
                         canTalk = true;
                         System.out.println("recebeu talk");
-                        
+
                         if (subMessages.length >= 2) {
-                            this.caller.addMessage(this.clienteName+" says: "+subMessages[1]);
-                        }else{
+                            this.caller.addMessage(this.clienteName + " says: " + subMessages[1]);
+                        } else {
                             this.connection.SendToClient(this.caller.getMessage());
                         }
-                        
+
                         break;
                     case "name":
+                        String antName = this.clienteName;
                         this.clienteName = subMessages[1];
-                        this.connection.SendToClient("Trocou o nome para: "+this.clienteName);
-                        System.out.println("Trocou o nome para: "+this.clienteName);
+                        this.caller.addMessage("('" + antName + "' trocou o nome para: '" + this.clienteName + "')");
+                        if (!this.canTalk) {
+                            this.connection.SendToClient("'" + antName + "' trocou o nome para: '" + this.clienteName + "'");
+                        }
+                        System.out.println("Trocou o nome para: " + this.clienteName);
                         break;
                     default:
                         break;
