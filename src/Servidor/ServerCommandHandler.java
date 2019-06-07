@@ -15,9 +15,13 @@ public class ServerCommandHandler extends Thread {
     private HandlerDirectory directory;
     private HandlerChatbot chatbot;
     private TCPServerConnection connection;
+    private TCPServerAtivosMain caller;
     private BufferedReader input;
+    private String clienteName = "cliente";
+    public boolean canTalk = false;
 
-    public ServerCommandHandler(Socket socket) throws IOException {
+    public ServerCommandHandler(Socket socket, TCPServerAtivosMain caller) throws IOException {
+        this.caller = caller;
         this.socket = socket;
         this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         this.connection = new TCPServerConnection(socket);
@@ -25,13 +29,16 @@ public class ServerCommandHandler extends Thread {
         directory = new HandlerDirectory();
         chatbot = new HandlerChatbot();
     }
+    
+    public void sendMessage(String message){
+        this.connection.SendToClient(message);
+    }
 
     @Override
     public void run() {
         Socket socket;
 
         while (true) {
-            //String fullMessage = this.connection.getMessage();
             String fullMessage = "";
             try {
                 fullMessage = this.input.readLine();
@@ -41,28 +48,31 @@ public class ServerCommandHandler extends Thread {
             System.out.println("recebido: " + fullMessage);
             if (fullMessage == null || fullMessage.equals("")) {
             } else {
-                //System.out.println(fullMessage);
                 StringTokenizer tok = new StringTokenizer(fullMessage, "|");
                 String[] subMessages = new String[tok.countTokens()];
-                
-                int i=0;
-                while(tok.hasMoreElements()){
+
+                int i = 0;
+                while (tok.hasMoreElements()) {
                     subMessages[i] = tok.nextToken();
+                    System.out.println("tok["+i+"] = "+subMessages[i]);
                     i++;
                 }
 
                 switch (subMessages[0]) {
                     case "files":
+                        canTalk = false;
                         System.out.println(directory.FolderStatus());
                         String messageReturn = directory.FolderStatus();
                         System.out.println("GetStatus: " + messageReturn);
                         this.connection.SendToClient(messageReturn);
                         break;
                     case "status":
+                        canTalk = false;
                         this.connection.SendToClient(stats.getStatus());
                         System.out.println(stats.getStatus());
                         break;
                     case "chatbot":
+                        canTalk = false;
                         if (subMessages.length >= 2) {
                             if (subMessages[1] != null) {
                                 if (subMessages[1].equals("none")) {
@@ -71,20 +81,31 @@ public class ServerCommandHandler extends Thread {
                                 } else {
                                     System.out.println("returnAnswer");
                                     this.connection.SendToClient(this.chatbot.returnAnswer(fullMessage));
-                                    System.out.println("enviou para o cliente: "+this.chatbot.returnAnswer(fullMessage));
+                                    System.out.println("enviou para o cliente: " + this.chatbot.returnAnswer(fullMessage));
                                 }
                             }
                         }
                         break;
                     case "database":
+                        canTalk = false;
                         System.out.println("recebeu database");
-                        this.connection.SendToClient("CPU Usage: " + stats.GetCPUUsage() + ", RAM Usage: " + stats.GetRAMUsage());
-                        System.out.println("enviou: " + "CPU Usage: " + stats.GetCPUUsage() + ", RAM Usage: " + stats.GetRAMUsage());
+                        this.connection.SendToClient("; Em breve!");
                         break;
                     case "talk":
+                        canTalk = true;
                         System.out.println("recebeu talk");
-                        this.connection.SendToClient("CPU Usage: " + stats.GetCPUUsage() + ", RAM Usage: " + stats.GetRAMUsage());
-                        System.out.println("enviou: " + "CPU Usage: " + stats.GetCPUUsage() + ", RAM Usage: " + stats.GetRAMUsage());
+                        
+                        if (subMessages.length >= 2) {
+                            this.caller.addMessage(this.clienteName+" says: "+subMessages[1]);
+                        }else{
+                            this.connection.SendToClient(this.caller.getMessage());
+                        }
+                        
+                        break;
+                    case "name":
+                        this.clienteName = subMessages[1];
+                        this.connection.SendToClient("Trocou o nome para: "+this.clienteName);
+                        System.out.println("Trocou o nome para: "+this.clienteName);
                         break;
                     default:
                         break;

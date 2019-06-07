@@ -24,28 +24,31 @@ public class HandlerStats {
         StringBuilder sb = new StringBuilder();
 
         //CPU USAGE
-        sb.append("CPU Usage: ");
+        sb.append("CPU USAGE;");
         sb.append(GetCPUUsage());
-        sb.append("\t");
+        sb.append(";");
+        sb.append(";");
 
         //RAM USAGE
-        sb.append("RAM Usage: ");
+        sb.append("RAM USAGE;");
         sb.append(GetRAMUsage());
-        sb.append("\t");
+        sb.append(";");
+        sb.append(";");
 
         //STORAGE USAGE
+        sb.append("STORAGE USAGE;");
         sb.append(String.format("Total space: %.2f GB",
                 (double) cDrive.getTotalSpace() / 1073741824));
-        sb.append("\t");
+        sb.append(";");
         sb.append(String.format("Total space: %.2f GB",
                 (double) cDrive.getTotalSpace() / 1073741824));
-        sb.append("\t");
+        sb.append(";");
         sb.append(String.format("Free space: %.2f GB",
                 (double) cDrive.getFreeSpace() / 1073741824));
-        sb.append("\t");
+        sb.append(";");
         sb.append(String.format("Usable space: %.2f GB",
                 (double) cDrive.getUsableSpace() / 1073741824));
-        sb.append("\t");
+        sb.append(";");
 
         messageReturn = sb.toString();
 

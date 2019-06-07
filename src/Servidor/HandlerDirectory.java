@@ -14,17 +14,6 @@ public class HandlerDirectory {
     public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
     public static String actualPath = serverPath;
 
-    public static void main(String[] args) {
-        /*System.out.println(NavigateForward("oiu"));
-        System.out.println(CreateFolder("pao"));
-        System.out.println(CreateFile("arquivo.txt"));
-        System.out.println(ListDirectory());
-        System.out.println(DeleteFile(1));
-        System.out.println(ListDirectory());
-        System.out.println(FolderStatus());*/
-        /*MoveFile(serverPath + "\\Folder1\\file.txt", serverPath + "\\Folder2\\batata.txt");
-        DeleteFile(serverPath + "\\Folder2\\file.txt");*/
-    }
 
     public static String NavigateForward(String folderName) {
 
@@ -73,7 +62,7 @@ public class HandlerDirectory {
         }
     }
 
-    public static String FolderStatus() {
+    public String FolderStatus() {
         CreateFolder("");
         StringBuilder sb = new StringBuilder();
         sb.append("Directory:");
@@ -90,7 +79,7 @@ public class HandlerDirectory {
         return sb.toString();
     }
 
-    public static String CreateFolder(String folderName) {
+    public String CreateFolder(String folderName) {
         String messageReturn = "";
         try {
             new File(actualPath + "\\" + folderName).mkdirs();
@@ -101,7 +90,7 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public static String CreateFile(String fileName) {
+    public String CreateFile(String fileName) {
         String messageReturn = "";
         try {
 
@@ -135,7 +124,7 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public static String ListDirectory() {
+    public String ListDirectory() {
         List<String> result = new ArrayList<>();
         try {
             System.out.println("Listing folder: " + actualPath);
@@ -156,7 +145,7 @@ public class HandlerDirectory {
         return "Erro ao listar";
     }
 
-    private static List<String> search(final File folder) {
+    private List<String> search(final File folder) {
         List<String> result = new ArrayList<>();
         folder.list();
         int i = 0;
@@ -189,7 +178,7 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public static String DeleteFile(int id) {
+    public String DeleteFile(int id) {
         File path = new File(actualPath);
 
         int i = 0;

@@ -3,9 +3,9 @@ package Servidor;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
-public class Bolinha3Server extends javax.swing.JFrame {
+public class ServidorInterface extends javax.swing.JFrame {
 
-    public Bolinha3Server() {
+    public ServidorInterface() {
         initComponents();
     }
 
@@ -101,7 +101,7 @@ public class Bolinha3Server extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Bolinha3Server().setVisible(true);
+                new ServidorInterface().setVisible(true);
             }
         });
     }

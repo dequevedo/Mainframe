@@ -10,12 +10,12 @@ public class TCPServerAtivosMain extends Thread {
 
     private List<ServerCommandHandler> serverCommandHandlerList;
     private ServerSocket server;
-    public int x;
-    public int y;
-    public int d;
-    public int inc;
+    private StringBuilder messagesChat;
+
 
     public TCPServerAtivosMain(int porta) throws IOException {
+        this.messagesChat = new StringBuilder();
+        this.messagesChat.append("Chat: ;;");
         this.server = new ServerSocket(porta);
         System.out.println(this.getClass().getSimpleName() + " rodando na porta: " + server.getLocalPort());
         this.serverCommandHandlerList = new ArrayList<>();
@@ -27,7 +27,7 @@ public class TCPServerAtivosMain extends Thread {
         while (true) {
             try {
                 socket = this.server.accept();
-                ServerCommandHandler serverCommandHandler = new ServerCommandHandler(socket);
+                ServerCommandHandler serverCommandHandler = new ServerCommandHandler(socket, this);
                 this.serverCommandHandlerList.add(serverCommandHandler);
                 System.out.println("novo cliente: "+this.serverCommandHandlerList.size());
                 newServer(serverCommandHandler);
@@ -41,6 +41,24 @@ public class TCPServerAtivosMain extends Thread {
     
     public synchronized void newServer(ServerCommandHandler serverCommandHandler) throws IOException {
         serverCommandHandlerList.add(serverCommandHandler);
+    }
+    
+    public String getMessage(){
+        System.out.println("getMessage (Main)");
+        return this.messagesChat.toString();
+    }
+    
+    public void addMessage(String message){
+        
+        this.messagesChat.append(message);
+        this.messagesChat.append(";");
+        System.out.println("(Main) message "+message+" added");
+        
+        for(ServerCommandHandler cli: serverCommandHandlerList){
+            if(cli.canTalk){
+                cli.sendMessage(messagesChat.toString());
+            }
+        }
     }
 
     public synchronized void removeConnection(TCPServerConnection connection) {
