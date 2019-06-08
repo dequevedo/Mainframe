@@ -102,24 +102,74 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
-    public String MoveFile(String source, String destination) {
+    public String MoveFile(String fileId, String destination) {
         String messageReturn = "";
+        String originPath = "";
+        String destinationPath = serverPath + destination;
+        
+        File path = new File(actualPath);
+        int i = 0;
+        for (String nome : path.list()) {
+            if (i == Integer.parseInt(fileId)) {
+                originPath = (actualPath + "\\" + nome);
+            }
+            i++;
+        }
+
         try {
+            /*System.out.println("____________Origin: " + originPath);
+            System.out.println("____________Destination: " + destinationPath);*/
+            
             Path temp = Files.move(
-                    Paths.get(source),
-                    Paths.get(destination)
+                    Paths.get(originPath),
+                    Paths.get(destinationPath)
             );
             if (temp != null) {
-                messageReturn = "File moved from '" + source + "' to '" + destination + "' successfully";
+                messageReturn = "File moved from '" + originPath + "' to '" + destinationPath + "' successfully";
                 System.out.println(messageReturn);
             } else {
                 messageReturn = "Failed to move the file";
                 System.out.println(messageReturn);
             }
         } catch (Exception e) {
-            messageReturn = "Failed to move the file: " + e.getMessage();
+            messageReturn = "Failed to move the file: " + e.getMessage()  + " Remember to use this destination format: \\Folder1\\Folder2\\fileName.txt";
             System.out.println(messageReturn);
         }
+        return messageReturn;
+    }
+
+    public String CopyFile(String fileId, String destination) {
+        String messageReturn = "";
+        String originPath = "";
+        String destinationPath = serverPath + destination;
+
+        File path = new File(actualPath);
+
+        int i = 0;
+        for (String nome : path.list()) {
+            if (i == Integer.parseInt(fileId)) {
+                originPath = (actualPath + "\\" + nome);
+            }
+            i++;
+        }
+
+        try {
+
+            FileInputStream fis = new FileInputStream(originPath);
+            FileOutputStream fos = new FileOutputStream(destinationPath);
+
+            int b;
+            while ((b = fis.read()) != -1) {
+                fos.write(b);
+            }
+
+            fis.close();
+            fos.close();
+            messageReturn = "File copied from '" + originPath + "' to '" + destinationPath + "' successfully";
+        } catch (Exception e) {
+            messageReturn = "Failed to copy the file: " + e.getMessage() + " Remember to use this destination format: \\Folder1\\Folder2\\fileName.txt";
+        }
+
         return messageReturn;
     }
 
@@ -152,29 +202,6 @@ public class HandlerDirectory {
             result.add("[" + i++ + "] " + nome);
         }
         return result;
-    }
-
-    public String CopyFile(String source, String destination) {
-        String messageReturn = "";
-        try {
-            FileInputStream fis = new FileInputStream(source);
-            FileOutputStream fos = new FileOutputStream(destination);
-
-            int b;
-            while ((b = fis.read()) != -1) {
-                fos.write(b);
-            }
-
-            fis.close();
-            fos.close();
-
-            messageReturn = "File copied from '" + source + "' to '" + destination + "' successfully";
-            System.out.println(messageReturn);
-        } catch (Exception e) {
-            messageReturn = "Failed to copy the file: " + e.getMessage();
-            System.out.println(messageReturn);
-        }
-        return messageReturn;
     }
 
     public String DeleteFile(int id) {
