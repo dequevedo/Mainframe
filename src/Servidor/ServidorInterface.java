@@ -82,17 +82,17 @@ public class ServidorInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String porta = jTextField1.getText();
+        String porta = jTextField1.getText(); //pega o texto da porta
         int port = Integer.parseInt(porta);
         try {
-            (new TCPServerAtivosMain(port)).start();
+            (new TCPServerAtivosMain(port)).start(); //inicia a classe responsável pelo servidor (TCPServerAtivosMain) mandando a porta como parametro
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "ERRO", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        System.exit(0);
+        System.exit(0); //exit
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

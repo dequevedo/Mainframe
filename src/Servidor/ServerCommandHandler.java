@@ -161,9 +161,9 @@ public class ServerCommandHandler extends Thread {
                     case "name": //caso receba o comando name, seta o segundo token como o nome desse cliente.
                         String antName = this.clienteName;
                         this.clienteName = subMessages[1];
-                        this.caller.addMessage("('" + antName + "' trocou o nome para: '" + this.clienteName + "')");
+                        this.caller.addMessage("('" + antName + "' trocou o nome para: '" + this.clienteName + "')"); //adiciona mensagem no chat que esse cliente trocou de nome
                         if (!this.canTalk) {
-                            Send("'" + antName + "' trocou o nome para: '" + this.clienteName + "'");
+                            Send("'" + antName + "' trocou o nome para: '" + this.clienteName + "'"); //se ele não estiver com chat ativo, retorna a msg que mudou de nome
                         }
                         System.out.println("Trocou o nome para: " + this.clienteName);
                         break;
