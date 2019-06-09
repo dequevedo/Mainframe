@@ -67,6 +67,7 @@ public class ClienteInterface extends javax.swing.JFrame {
         });
 
         jButton3.setText("Files");
+        jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -74,6 +75,7 @@ public class ClienteInterface extends javax.swing.JFrame {
         });
 
         jButton4.setText("Status");
+        jButton4.setEnabled(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -81,6 +83,7 @@ public class ClienteInterface extends javax.swing.JFrame {
         });
 
         jButton5.setText("Chatbot");
+        jButton5.setEnabled(false);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -88,8 +91,10 @@ public class ClienteInterface extends javax.swing.JFrame {
         });
 
         jButton6.setText("Database");
+        jButton6.setEnabled(false);
 
         jButton7.setText("Talk");
+        jButton7.setEnabled(false);
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -121,6 +126,7 @@ public class ClienteInterface extends javax.swing.JFrame {
 
         jButton8.setText("Change");
         jButton8.setToolTipText("");
+        jButton8.setEnabled(false);
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -206,6 +212,8 @@ public class ClienteInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    //BOTÃO CONECTAR PRESSIONADO --> pega ip e porta, cria uma instancia da clase TCPClientMain (intermediario entre entrada e saida de msgs), ativa os botões, e coloca true em isConnected
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("botão conectar pressionado");
         try {
@@ -213,9 +221,16 @@ public class ClienteInterface extends javax.swing.JFrame {
             String server = jTextField1.getText();
             int porta = Integer.parseInt(jTextField2.getText());
             System.out.println("tentando se conectar");
-            tcpClient = new TCPClientMain(server, porta, this);
+            tcpClient = new TCPClientMain(server, porta, this); //criação da instancia que realmente faz a conexão (cria o socket)
+            //seta botões
             jButton1.setEnabled(false);
             jButton2.setEnabled(true);
+            jButton3.setEnabled(true);
+            jButton4.setEnabled(true);
+            jButton5.setEnabled(true);
+            jButton6.setEnabled(true);
+            jButton7.setEnabled(true);
+            jButton8.setEnabled(true);
             this.isConnected = true;
             System.out.println("conectado!");
         } catch (Exception e) {
@@ -224,6 +239,7 @@ public class ClienteInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    //BOTÃO DESCONECTAR --> chama o metodo closeConnection()
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             closeConnection();
@@ -236,6 +252,7 @@ public class ClienteInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_messageTextActionPerformed
 
+    //metodo públic que será acessado pelo Receive, para setar as respostas do servidor no TextArea, todo momento que receber alguma mensagem.
     public void setjText(String message){
         this.jTextArea1.setText(this.command+"\n"+message);
     }
@@ -248,53 +265,59 @@ public class ClienteInterface extends javax.swing.JFrame {
         this.SendButton.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    //BOTÃO FILES --> ao clicar em Files, muda o comando atual selecionado (this.command) e envia para o servidor o comando "files" sem parametros, para receber o status dos arquivos
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.command = "files";
         System.out.println("clicou em files");
         sendToServer(this.command);
 
+        //ativa o campo de escrever comando e o botão send
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
-
-// TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    //BOTÃO SEND --> verifica e envia o comando + mensagem
     private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
-        if(this.command.equals("files")){
+        if(this.command.equals("files")){ //verifica se o comando atual é "files", se for converte espaço " " em pipe "|" para correto tratamento no servidor, e envia a mensagem "files"+comando escrito  
             String message = this.messageText.getText().replace(" ", "|");
             System.out.println("message pipeada: "+message);
             sendToServer(this.command + "|" + message);
-        }else{
+        }else{ //se o comando atual não for "files" envia o comando atual + a mensagem, sem fazer a conversão de espaço para pipe
             sendToServer(this.command + "|" + this.messageText.getText());
         }
     }//GEN-LAST:event_SendButtonActionPerformed
 
+    //chama o metodo do TCPClientMain que envia a mensagem ao servidor 
     public void sendToServer(String messageToSend) {
-            this.tcpClient.writeMessage(messageToSend);
             this.tcpClient.writeMessage(messageToSend);
     }
 
+    //BOTÃO CHATBOT --> envia o comando atual "chatbot" + "|none" para que o servidor retorne uma simples mensagem para ele fazer uma pergunta
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         this.command = "chatbot";
         System.out.println("clicou em chatbot");
         sendToServer(this.command + "|none");
 
+        //libera o uso do campo de texto da mensagem e do botão send
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    //BOTÃO CHANGE --> envia o comando "name" + "|"+ novo nome para o servidor
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         sendToServer("name|" + this.nameText.getText());
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
+    //BOTÃO TALK --> envia o comando "talk" para o servidor e ativa o campo de texto de comando e o botão send
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        this.command = "talk";
+        
+        sendToServer(command);
         this.messageText.setEditable(true);
         this.SendButton.setEnabled(true);
-        this.command = "talk";
-        sendToServer(command);
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    //desconecta do servidor
     public void closeConnection() throws Throwable {
         try {
             tcpClient.closeConnection();

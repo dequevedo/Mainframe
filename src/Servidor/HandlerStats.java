@@ -9,12 +9,12 @@ public class HandlerStats {
     public double cpu;
     public double ram;
     public double disk;
-    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class); //biblioteca que lê o status do computador
 
     public HandlerStats() {
     }
 
-    public double GetCPUUsage() {
+    public double GetCPUUsage() { //retorna o uso de CPU
         return osBean.getProcessCpuLoad();
     }
 
@@ -55,11 +55,7 @@ public class HandlerStats {
         return messageReturn;
     }
 
-    public double GetRAMUsage() {
+    public double GetRAMUsage() { //retorna o uso de memória
         return (osBean.getTotalPhysicalMemorySize());
-    }
-
-    public double GetDiskUsage() {
-        return 0;
     }
 }
