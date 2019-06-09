@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/ClienteInterface.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/ServerCommandHandler.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/HandlerChatbot.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/Bolinha3Server.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/HandlerDirectory.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Servidor/TCPServerConnection.java</file>
-            <file>file:/C:/Users/Mikeask/Documents/GitHub/Mainframe/src/Cliente/TCPClientMain.java</file>
+            <file>file:/C:/Users/danie/OneDrive/Documents/Netbeans%20Projects/Mainframe/src/Cliente/ClienteInterface.java</file>
+            <file>file:/C:/Users/danie/OneDrive/Documents/Netbeans%20Projects/Mainframe/src/Servidor/ServidorInterface.java</file>
+            <file>file:/C:/Users/danie/OneDrive/Documents/Netbeans%20Projects/Mainframe/src/Servidor/HandlerDirectory.java</file>
+            <file>file:/C:/Users/danie/OneDrive/Documents/Netbeans%20Projects/Mainframe/src/Servidor/ServerCommandHandler.java</file>
         </group>
     </open-files>
 </project-private>

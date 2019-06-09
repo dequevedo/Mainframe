@@ -14,10 +14,13 @@ public class HandlerDirectory {
     public static String serverPath = System.getProperty("user.home") + "\\Desktop" + "\\ServerMainframe";
     public static String actualPath = serverPath;
 
+    //Método para navegar para outro diretório
     public String NavigateForward(String folderName) {
 
         File path = new File(actualPath);
 
+        //Procura por uma pasta que tenha o nome igual o parametro recebido,
+        //Caso não encontrar, uma mensagem de erro será retornada
         int i = 0;
         for (String nome : path.list()) {
             if (folderName.equals(nome)) {
@@ -33,17 +36,24 @@ public class HandlerDirectory {
         return "Directory " + folderName + " not found";
     }
 
+    //Navegar para o diretório anterior
     public String NavigateBack() {
+        //Subdivide o endereço atual pelo token "\\"
         StringTokenizer st = new StringTokenizer(actualPath, "\\");
         StringBuilder sb = new StringBuilder();
         List<String> elements = new ArrayList<>();
 
+        //Armazena cada elemento obtido pelo tokenizer em uma lista
         while (st.hasMoreTokens()) {
             elements.add(st.nextToken());
         }
 
+        //Remove apenas o último elemento da lista
+        //Dessa forma obtém-se o endereço da pasta anterior.
+        //Porem ainda falta colocar "\\" novamente
         elements.remove(elements.size() - 1);
 
+        //Percorre cada elemento da lista, e adiciona "\\" entre eles
         for (int i = 0; i < elements.size(); i++) {
             sb.append(elements.get(i));
             if (i != elements.size() - 1) {
@@ -61,6 +71,7 @@ public class HandlerDirectory {
         }
     }
 
+    //Método para mostrar ao usuário informações gerais
     public String FolderStatus() {
         CreateFolder("");
         StringBuilder sb = new StringBuilder();
@@ -78,6 +89,7 @@ public class HandlerDirectory {
         return sb.toString();
     }
 
+    //Método para criar uma nova pasta
     public String CreateFolder(String folderName) {
         String messageReturn = "";
         try {
@@ -89,6 +101,7 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
+    //Método para criar um novo arquivo
     public String CreateFile(String fileName) {
         String messageReturn = "";
         try {
@@ -102,11 +115,13 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
+    //Método para mover um arquivo, através de um Id recebido
     public String MoveFile(String fileId, String destination) {
         String messageReturn = "";
         String originPath = "";
         String destinationPath = serverPath + destination;
-        
+
+        //Procura o arquivo que tenha um Id igual ao fileId recebido
         File path = new File(actualPath);
         int i = 0;
         for (String nome : path.list()) {
@@ -117,9 +132,6 @@ public class HandlerDirectory {
         }
 
         try {
-            /*System.out.println("____________Origin: " + originPath);
-            System.out.println("____________Destination: " + destinationPath);*/
-            
             Path temp = Files.move(
                     Paths.get(originPath),
                     Paths.get(destinationPath)
@@ -132,12 +144,13 @@ public class HandlerDirectory {
                 System.out.println(messageReturn);
             }
         } catch (Exception e) {
-            messageReturn = "Failed to move the file: " + e.getMessage()  + " Remember to use this destination format: \\Folder1\\Folder2\\fileName.txt";
+            messageReturn = "Failed to move the file: " + e.getMessage() + " Remember to use this destination format: \\Folder1\\Folder2\\fileName.txt";
             System.out.println(messageReturn);
         }
         return messageReturn;
     }
 
+    //Método para copiar um arquivo
     public String CopyFile(String fileId, String destination) {
         String messageReturn = "";
         String originPath = "";
@@ -145,6 +158,7 @@ public class HandlerDirectory {
 
         File path = new File(actualPath);
 
+        //Procura o arquivo que tenha um Id igual ao fileId recebido
         int i = 0;
         for (String nome : path.list()) {
             if (i == Integer.parseInt(fileId)) {
@@ -173,6 +187,7 @@ public class HandlerDirectory {
         return messageReturn;
     }
 
+    //Lista todos os arquivos e pastas no diretório atual (actualPath)
     public String ListDirectory() {
         List<String> result = new ArrayList<>();
         try {
@@ -194,6 +209,7 @@ public class HandlerDirectory {
         return "Erro ao listar";
     }
 
+    //Encontra e obtem o Id e nome de pastas e arquivos na pasta recebida
     private List<String> search(final File folder) {
         List<String> result = new ArrayList<>();
         folder.list();
@@ -204,6 +220,7 @@ public class HandlerDirectory {
         return result;
     }
 
+    //Deleta um determinado arquivo, com base em um Id recebido
     public String DeleteFile(int id) {
         File path = new File(actualPath);
 
@@ -220,6 +237,7 @@ public class HandlerDirectory {
         return "Failed to delete the file with id[" + id + "]";
     }
 
+    //Deleta um determinado arquivo, com base em um nome recebido
     public String DeleteFile(String fileName) {
         try {
             File file = new File(actualPath + "\\" + fileName);
